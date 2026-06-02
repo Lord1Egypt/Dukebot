@@ -3,5 +3,5 @@ google-genai>=1.0.0
 openai>=1.0.0
 Pillow>=10.1.0
 requests>=2.31.0
-md2tgmd @ git+https://github.com/yym68686/md2tgmd.git@e3c23501a21d2ab07d2f63e1d3a63cc9571b44ac
+md2tgmd>=0.3.10
 Werkzeug>=3.0.1
