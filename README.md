@@ -55,15 +55,22 @@ The `/prompt` command gives you three built-in presets plus a custom option:
 
 ## Deployment
 
-### Vercel (Recommended)
+### Vercel (Recommended - One Click Deploy)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/duke-bot)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Lord1Egypt/Dukebot)
 
-1. Fork or clone this repository
-2. Connect your repo to [Vercel](https://vercel.com)
-3. Add the environment variables below in the Vercel dashboard
-4. Deploy — Vercel automatically builds from `vercel.json`
-5. Set your Telegram webhook:
+**Fastest way to deploy:**
+
+1. Click the "Deploy with Vercel" button above
+2. Connect your GitHub account
+3. Authorize Vercel to access your repos
+4. Click "Import Repository"
+5. Add environment variables in Vercel dashboard:
+   - `BOT_TOKEN` — Your Telegram bot token
+   - `GOOGLE_API_KEY` — Your Google Gemini API key
+   - Other optional vars (see Environment Variables section below)
+6. Click "Deploy"
+7. After deployment completes, set your Telegram webhook:
    ```
    https://api.telegram.org/bot<BOT_TOKEN>/setWebhook?url=<YOUR_VERCEL_URL>
    ```
