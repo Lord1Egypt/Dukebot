@@ -1,8 +1,9 @@
+import os
 from flask import Flask, render_template, request
 
 from .handle import handle_message, handle_callback
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates"))
 
 
 @app.route("/", methods=["POST", "GET"])
