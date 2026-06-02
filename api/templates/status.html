@@ -1,78 +1,253 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Update Webhook</title>
-    <script src="https://unpkg.com/htmx.org@1.6.0/dist/htmx.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duke Bot — Setup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
-        .center-container {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        input,
-        a {
-            margin: 15px;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1117;
+            color: #e1e4e8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .header-icon {
+            font-size: 28px;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #f0f6fc;
+        }
+
+        .header p {
+            font-size: 13px;
+            color: #8b949e;
+            margin-top: 2px;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #30363d;
+            margin: 20px 0;
+        }
+
+        .instructions {
+            font-size: 14px;
+            color: #8b949e;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 24px;
+        }
+
+        .input-group label {
+            font-size: 13px;
+            color: #8b949e;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #e1e4e8;
+            font-size: 14px;
+            padding: 10px 14px;
+            outline: none;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+
+        .input-group input:focus {
+            border-color: #58a6ff;
+        }
+
+        .input-group input::placeholder {
+            color: #484f58;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s, transform 0.1s;
+            cursor: pointer;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn i {
+            width: 18px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .btn-green {
+            background: #1a4731;
+            color: #3fb950;
+            border: 1px solid #2ea043;
+        }
+
+        .btn-green:hover {
+            background: #2ea043;
+            color: #fff;
+        }
+
+        .btn-blue {
+            background: #0c2d6b;
+            color: #58a6ff;
+            border: 1px solid #1f6feb;
+        }
+
+        .btn-blue:hover {
+            background: #1f6feb;
+            color: #fff;
+        }
+
+        .btn-red {
+            background: #3d1a1a;
+            color: #f85149;
+            border: 1px solid #da3633;
+        }
+
+        .btn-red:hover {
+            background: #da3633;
+            color: #fff;
+        }
+
+        .btn-label {
+            flex: 1;
+        }
+
+        .btn-arrow {
+            margin-left: auto;
+            opacity: 0.5;
+            font-size: 12px;
+        }
+
+        .footer {
+            margin-top: 24px;
+            font-size: 12px;
+            color: #484f58;
+            text-align: center;
         }
     </style>
     <script>
         function updateURL() {
-            var userInput = document.getElementById('userInput').value;
-            var currentUrl = window.location.href;
-            var newUrl1 = 'https://api.telegram.org/bot' + userInput + '/setWebhook?url=' + currentUrl + '&allowed_updates=' + encodeURIComponent('["message","callback_query"]');
-            var newUrl2 = 'https://api.telegram.org/bot' + userInput + '/getWebhookInfo';
-            var newUrl3 = 'https://api.telegram.org/bot' + userInput + '/deleteWebhook';
+            var token = document.getElementById('botToken').value.trim();
+            var base = window.location.origin + window.location.pathname;
+            if (!base.endsWith('/')) base += '/';
 
-            var setWebhookURL = document.getElementById('setWebhookURL');
-            setWebhookURL.href = newUrl1;
+            document.getElementById('setWebhookURL').href = token
+                ? 'https://api.telegram.org/bot' + token + '/setWebhook?url=' + base + '&allowed_updates=' + encodeURIComponent('["message","callback_query"]')
+                : '#';
 
-            var getWebhookInfoURL = document.getElementById('getWebhookInfoURL');
-            getWebhookInfoURL.href = newUrl2;
+            document.getElementById('getWebhookInfoURL').href = token
+                ? 'https://api.telegram.org/bot' + token + '/getWebhookInfo'
+                : '#';
 
-            var deleteWebhookURL = document.getElementById('deleteWebhookURL');
-            deleteWebhookURL.href = newUrl3;
-
-
-            /*             var urlText = document.getElementById('urlText1');
-                        urlText.textContent = newUrl1;
-            
-                        var urlText = document.getElementById('urlText2');
-                        urlText.textContent = newUrl2;
-            
-                        var urlText = document.getElementById('urlText3');
-                        urlText.textContent = newUrl3; */
+            document.getElementById('deleteWebhookURL').href = token
+                ? 'https://api.telegram.org/bot' + token + '/deleteWebhook'
+                : '#';
         }
 
-        window.onload = function () {
-            updateURL();
-        }
+        window.onload = updateURL;
     </script>
 </head>
 
 <body>
-    <div class="center-container">
-        <div>
-            <p>Once you've entered your telegram bot token, </p>
-            <p>simply click the link below to connect your Telegram bot
-                with Vercel.</p>
+    <div class="card">
+        <div class="header">
+            <span class="header-icon">🤖</span>
+            <div>
+                <h1>Duke Bot Setup</h1>
+                <p>Connect your Telegram bot to Vercel</p>
+            </div>
         </div>
-        <div>telegram bot token: <input id="userInput" type="text" hx-trigger="keyup changed delay:500ms"
-                oninput="updateURL()" style="width: 350px;" />
+
+        <hr class="divider">
+
+        <p class="instructions">
+            Enter your Telegram bot token below, then click <strong>Set Webhook</strong> to activate the bot.
+        </p>
+
+        <div class="input-group">
+            <label for="botToken"><i class="fa-solid fa-key"></i> Bot Token</label>
+            <input id="botToken" type="text" placeholder="123456789:ABCdef..." oninput="updateURL()" />
         </div>
-        <div><a id="setWebhookURL" href="#">
-                <span id="setWebhook">setWebhook(start bot)</span>
-            </a></div>
-        <a></a>
-        <div><a id="getWebhookInfoURL" href="#">
-                <span id="getWebhookInfo">getWebhookInfo</span>
-            </a></div>
-        <a></a>
-        <div><a id="deleteWebhookURL" href="#">
-                <span id="deleteWebhook">deleteWebhook(stop bot)</span>
-            </a></div>
+
+        <div class="actions">
+            <a id="setWebhookURL" href="#" class="btn btn-green" target="_blank">
+                <i class="fa-solid fa-plug-circle-bolt"></i>
+                <span class="btn-label">Set Webhook <small>(start bot)</small></span>
+                <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
+            </a>
+
+            <a id="getWebhookInfoURL" href="#" class="btn btn-blue" target="_blank">
+                <i class="fa-solid fa-circle-info"></i>
+                <span class="btn-label">Get Webhook Info</span>
+                <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
+            </a>
+
+            <a id="deleteWebhookURL" href="#" class="btn btn-red" target="_blank">
+                <i class="fa-solid fa-plug-circle-xmark"></i>
+                <span class="btn-label">Delete Webhook <small>(stop bot)</small></span>
+                <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
+            </a>
+        </div>
+
+        <div class="footer">
+            Duke Bot · Powered by Vercel &amp; Google Gemini
+        </div>
     </div>
 </body>
 
