@@ -17,3 +17,6 @@ def home():
             handle_callback(update)
         return "ok"
     return render_template("status.html")
+
+
+handler = app
