@@ -61,7 +61,7 @@ generation_config = {"max_output_tokens": 2048}
 help_text = (
     "Duke Bot - Multi-model AI assistant\n\n"
     "Send me text or images and I'll respond using the selected AI model.\n"
-    "In groups, @mention me or reply to my messages.\n\n"
+    "In groups, mention me by name or reply to my messages.\n\n"
     "Commands:\n"
     "/new - Start a fresh conversation\n"
     "/model - Switch AI model\n"
