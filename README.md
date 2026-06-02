@@ -1,106 +1,192 @@
-# tg-gemini-bot
+# Duke Bot 🤖
 
-[EN](README.md) | [简中](README_zh-CN.md) 
+A powerful Telegram AI bot that supports **Google Gemini** and any **OpenAI-compatible API** (OpenRouter, OpenCode, Groq, Together AI, Mistral, and more). Switch models and system prompts on the fly — right inside Telegram.
 
-The tg-gemini-bot let's you use Google Gemini services right on your personal Telegram bot.
-
-Super easy, just a single click and you've got it set up on Vercel.
-
-![screen](./screenshots/screen.png)
-
-🚀 If you don't want to deploy it yourself, you can use this deployment-free telegram bot: [GeminiBot](https://t.me/geminipro_api_bot). This bot is a fork from this project, providing completely identical features.
+---
 
 ## Features
 
-- This is built with Flask - super straightforward and easy to develop.
-- It's an all front-end project, and you can get it up and running on Vercel with just one click.
-- Supports Gemini continuous conversation. (Due to Vercel's restrictions, conversations may not be saved for a long time)
-- Supports both Gemini text, image interface, and telegram markdown.
+- **Multi-model support** — Google Gemini (2.0 Flash, 1.5 Pro, 1.5 Flash) and any OpenAI-compatible provider
+- **`/model`** — Switch AI models with a tap via inline keyboard
+- **`/prompt`** — Choose from preset system prompts or write your own custom prompt
+- **Image understanding** — Send photos and the bot will analyze them
+- **Conversation history** — Maintains chat context per user/group
+- **Group support** — Works in Telegram groups and supergroups; shared or per-user history
+- **Access control** — Restrict usage to specific users or groups
+- **Admin commands** — Debug logging and admin-only management tools
+- **One-click deploy** — Works on Vercel, Railway, Render, and other platforms
 
-## Preparation
+---
 
-Get these things ready, and then fill them in as environment variables in Vercel.
+## Commands
 
-- **GOOGLE_API_KEY**
+| Command | Description |
+|---------|-------------|
+| `/new` | Start a fresh conversation |
+| `/model` | Switch AI model (inline keyboard) |
+| `/prompt` | Change system prompt (presets + custom) |
+| `/get_my_info` | Get your Telegram user ID |
+| `/get_group_info` | Get the group ID (group chats only) |
+| `/help` | Show help message |
 
-  apply for your Google gemini pro api: https://makersuite.google.com/app/apikey
+**Admin-only** (requires `ADMIN_ID` + `IS_DEBUG_MODE=1`):
 
-- **BOT_TOKEN**
+| Command | Description |
+|---------|-------------|
+| `/get_allowed_users` | List authorized users |
+| `/get_allowed_groups` | List authorized groups |
+| `/get_api_keys` | Show API key status |
+| `/list_models` | List configured models |
 
-  create your own telegram bot ([check the tutorial](https://flowxo.com/how-to-create-a-bot-for-telegram-short-and-simple-guide-for-beginners/)), obtain the token of the bot, which is in the format similar to: `67295022320:AAHmfuSQb0ZoUq0ycNPvgzqCCX7I1uzzaSE`
+---
 
-- **allowed USERS or GROUPS**
+## System Prompts
 
-  Collect the user or group IDs that have access to this bot. You can separate them using any symbol in `,，;；` or spaces.
+The `/prompt` command gives you three built-in presets plus a custom option:
 
-  You can also turn off authentication so everyone and groups can use it
+| Preset | Description |
+|--------|-------------|
+| 🤖 Default | Friendly, concise AI assistant |
+| 💼 Professional | Expert consultant with structured answers |
+| ✨ Creative | Imaginative partner with vivid storytelling |
+| ✏️ Custom | Type your own system prompt |
 
-  [learn more](#environment-variable)
+---
 
-## Get Started
+## Deployment
 
-1. Click [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fwinniesi%2Ftg-gemini-bot&env=BOT_TOKEN%2CGOOGLE_API_KEY%2CALLOWED_USERS&project-name=tg-gemini-bot&repository-name=tg-gemini-bot) to deploy to Vercel.
+### Vercel (Recommended)
 
-2. **Set the environment variable** according to the instructions below.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/duke-bot)
 
-3. Once everything's done, visit the domain name of your Vercel project address. (Visiting the `Domains` instead of the `Deployment Domains` provided by Vercel for the project .)
+1. Fork or clone this repository
+2. Connect your repo to [Vercel](https://vercel.com)
+3. Add the environment variables below in the Vercel dashboard
+4. Deploy — Vercel automatically builds from `vercel.json`
+5. Set your Telegram webhook:
+   ```
+   https://api.telegram.org/bot<BOT_TOKEN>/setWebhook?url=<YOUR_VERCEL_URL>
+   ```
+   Or visit your Vercel deployment URL in a browser and use the setup page.
 
-   Or you could just click on `https://api.telegram.org/bot<bot-token>/setWebhook?url=<vercel-domain> ` to connect your Telegram bot to Vercel services. (remember to replace `<token>` and `<vercel-domain>` with your actual corresponding parameters)
+### Railway
 
-![update_telegram_bot](./screenshots/visit_domains.png)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new)
 
-4. Fill in your telegram bot token on the page to associate telegram bot and vercel.
+1. Fork this repository
+2. Create a new Railway project → **Deploy from GitHub repo**
+3. Add environment variables in the Railway dashboard
+4. Set start command: `flask --app api.index run --host 0.0.0.0 --port $PORT`
+5. Set your webhook URL to the Railway domain
 
-![update_telegram_bot](./screenshots/update_telegram_bot.png)
+### Render
 
-## Environment Variable
+1. Fork this repository
+2. Create a new **Web Service** on [Render](https://render.com)
+3. Connect your GitHub repo
+4. Set **Build Command**: `pip install -r requirements.txt`
+5. Set **Start Command**: `flask --app api.index run --host 0.0.0.0 --port $PORT`
+6. Add environment variables
+7. Set your webhook to the Render domain
 
-| Environment Variable | Required | Description                                                                                                                            |
-| -------------------- | --- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| GOOGLE_API_KEY       | YES | Your Google gemini pro api, it looks like `AI2aS4Cl55F9ni9WN84Qn_KWRSuqXvUWkPq6kovc `                                                  |
-| BOT_TOKEN            | YES | The Telegram bot token you applied for, it looks like `67295022320:AAHmfuSQb0ZoUq0ycNPvgzqCCX7I1uzzaSE`                                |
-| ALLOWED_USERS        | No | List the allowed user's Telegram usernames. If there's more than one person, you can separate them using any symbol in `,，;；` or spaces. and it should look like: `name1,name2`.Including the `@` symbol is optional, so either `ohmorningsir` or `@ohmorningsir` is acceptable. No need to be case sensitive. If you do not set a username, you can use id instead. use `/get_my_info` to get. |
-| ALLOWED_GROUPS | No | List the allowed group's Telegram usernames. If there's more than one person, you can separate them using any symbol in `,，;；` or spaces. and it should look like: `group1,group2`.Including the `@` symbol is optional, so either `ohmorningsirs_group` or `@ohmorningsirs_group` is acceptable. No need to be case sensitive. If it is a private group, you can use id instead. use `/get_group_info` to get. |
-| ADMIN_ID | No | ten-digit telegramID. If you want to enable debug mode, this value must be set correctly. |
-| IS_DEBUG_MODE | No | Whether to enable debug mode. `0` to disable. `1` to enable. Default is `0` . |
-| AUCH_ENABLE | No | `0` to disable auth. Anyone can use this bot. `1` to enable auth. Default is `1` . |
-| GROUP_MODE | No | `1` to use common chat history in groups, `2` to record chat history individually for each person. Default is `1` . |
+---
 
-Tip: After modifying the environment variables, you need to redeploy them to take effect. You need to enter the internal console of the Vercel project, click the `Deployments` button at the top, select the `···` button to the right of the top item in the list, not the button directly to the right of the "Deployments" title! click `Redeploy` to redeploy.
+## Environment Variables
 
-## Command list
-`/new` Start a new chat
+### Required
 
-`/get_my_info` Get personal information
+| Variable | Description |
+|----------|-------------|
+| `BOT_TOKEN` | Your Telegram bot token from [@BotFather](https://t.me/BotFather) |
+| `GOOGLE_API_KEY` | Google Gemini API key from [Google AI Studio](https://aistudio.google.com/app/apikey) |
 
-`/get_group_info` Get group information (group only)
+### OpenAI-Compatible API (Optional)
 
-`/get_allowed_users` Get the list of users that are allowed to use the bot (admin only)
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `OPENAI_API_KEY` | API key for OpenAI-compatible provider | — |
+| `OPENAI_BASE_URL` | Base URL of the provider | `https://api.openai.com/v1` |
 
-`/get_allowed_groups` Get the list of groups that are allowed to use the bot (admin only)
+**Popular providers and their base URLs:**
 
-`/list_models` list_models (admin only)
+| Provider | Base URL |
+|----------|----------|
+| OpenAI | `https://api.openai.com/v1` |
+| OpenRouter | `https://openrouter.ai/api/v1` |
+| Groq | `https://api.groq.com/openai/v1` |
+| Together AI | `https://api.together.xyz/v1` |
+| Mistral | `https://api.mistral.ai/v1` |
+| OpenCode | Your self-hosted URL |
 
-`/get_api_key` Get the list of gemini's apikeys. It is currently useless. Multiple keys may be added automatically in the future. (admin only)
+### Models (Optional)
 
-`/help` Get help
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DEFAULT_MODEL` | Model used for new conversations | `gemini-2.0-flash` |
+| `GEMINI_MODELS` | Comma-separated list of Gemini models to offer | `gemini-2.0-flash,gemini-1.5-pro,gemini-1.5-flash` |
+| `OPENAI_MODELS` | Comma-separated list of OpenAI-compat models to offer | `gpt-4o,gpt-4o-mini` |
 
-`/5g_test` :)
+### Access Control (Optional)
 
-## Group use
+| Variable | Description |
+|----------|-------------|
+| `AUCH_ENABLE` | `1` = restricted (default), `0` = open to everyone |
+| `ALLOWED_USERS` | Comma-separated Telegram usernames or user IDs |
+| `ALLOWED_GROUPS` | Comma-separated group names or group IDs |
 
-Invite the robot to the group and add it as an administrator. The robot will respond to all messages in the group. Otherwise, it will only respond to messages related to the robot. To use it, you need to @robot or reply to any message sent by the robot.
+### Admin & Debug (Optional)
 
-Currently, topic groups are not well supported, and all messages sent by the robot will be sent in General.
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `ADMIN_ID` | Your 10-digit Telegram user ID | — |
+| `IS_DEBUG_MODE` | `1` = enable debug logs to admin, `0` = off | `0` |
+| `GROUP_MODE` | `1` = shared group history, `2` = per-user history in groups | `1` |
 
-## How to figure out what's wrong
+---
 
-So, if you've done everything step by step just like we talked about and your Telegram bot is still not doing its thing, then it's a good idea to poke around the Vercel logs to see what's up.
+## Quick Start
 
-1. Open your project in vercel, click on the **Deployments** tab, check whether the deployment is successful, if there is an error, please modify according to the error prompt.
+1. **Create a bot** — Message [@BotFather](https://t.me/BotFather) on Telegram, use `/newbot`, and save the token.
 
-2. If no errors have occurred here, open the **Logs** tab, click on an erroneous log, and the program's output will be displayed on the right.
+2. **Get a Gemini API key** — Visit [Google AI Studio](https://aistudio.google.com/app/apikey) and create a free key.
 
-![screen](./screenshots/vercel_logs.png)
+3. **Deploy** — Click one of the deploy buttons above or follow the manual steps.
 
-3. If there are any error messages, you can open an issue, and then provide the error information.
+4. **Set environment variables** — Add `BOT_TOKEN` and `GOOGLE_API_KEY` at minimum.
+
+5. **Register the webhook** — Set the webhook URL to your deployment domain.
+
+6. **Register commands with BotFather** (optional but recommended):
+   ```
+   new - Start a fresh conversation
+   model - Switch AI model
+   prompt - Change system prompt
+   get_my_info - Get your Telegram ID
+   get_group_info - Get group ID
+   help - Show help
+   ```
+
+---
+
+## Architecture
+
+```
+Telegram webhook → Flask (Vercel / Railway / Render)
+                       ↓
+               handle_message / handle_callback
+                  ↓              ↓
+            text / photo     inline keyboard
+                  ↓              ↓
+          ChatManager      user_settings
+          (per-session)   (model + prompt)
+                  ↓
+        Gemini API  ←→  OpenAI-compatible API
+```
+
+Chat history is in-memory and resets on server restart (expected on serverless platforms). Use `/new` to manually clear history at any time.
+
+---
+
+## License
+
+MIT

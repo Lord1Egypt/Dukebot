@@ -22,7 +22,7 @@
         function updateURL() {
             var userInput = document.getElementById('userInput').value;
             var currentUrl = window.location.href;
-            var newUrl1 = 'https://api.telegram.org/bot' + userInput + '/setWebhook?url=' + currentUrl + '&allowed_updates=' + '["message"]';
+            var newUrl1 = 'https://api.telegram.org/bot' + userInput + '/setWebhook?url=' + currentUrl + '&allowed_updates=' + encodeURIComponent('["message","callback_query"]');
             var newUrl2 = 'https://api.telegram.org/bot' + userInput + '/getWebhookInfo';
             var newUrl3 = 'https://api.telegram.org/bot' + userInput + '/deleteWebhook';
 

@@ -1,61 +1,54 @@
-"""
-The class ChatManager manages all users and their conversations in the
-form of a dictionary.
-
-Each user has a ChatConversation instance, which may include multiple
-previous conversations of the user (provided by the Google Gemini API).
-
-The class ImageChatManager is rather simple, as the images in Gemini Pro
-do not have a contextual environment. This class performs some tasks
-such as obtaining photos to addresses and so on.
-"""
 from io import BytesIO
-from typing import Dict
+from typing import Dict, Any
 
 import requests
 
 from .config import BOT_TOKEN
-from .gemini import ChatConversation, generate_text_with_image
+
+
+def _make_conversation(model: str, system_prompt: str):
+    if model.startswith("gemini"):
+        from .gemini import ChatConversation
+    else:
+        from .openai_compat import ChatConversation
+    return ChatConversation(model=model, system_prompt=system_prompt)
 
 
 class ChatManager:
-    """setting up a basic conversation storage manager"""
-
     def __init__(self):
-        self.chats: Dict[int, ChatConversation] = {}
+        self._chats: Dict[int, Any] = {}
 
-    def _new_chat(self, history_id: int) -> ChatConversation:
-        chat = ChatConversation()
-        self.chats[history_id] = chat
-        return chat
+    def get_chat(self, history_id: int, model: str, system_prompt: str):
+        if history_id not in self._chats:
+            self._chats[history_id] = _make_conversation(model, system_prompt)
+        return self._chats[history_id]
 
-    def get_chat(self, history_id: int) -> ChatConversation:
-        if self.chats.get(history_id) is None:
-            return self._new_chat(history_id)
-        return self.chats[history_id]
+    def reset_chat(self, history_id: int) -> None:
+        self._chats.pop(history_id, None)
+
+    def has_chat(self, history_id: int) -> bool:
+        return history_id in self._chats
 
 
-class ImageChatManger:
-    def __init__(self, prompt, file_id: str) -> None:
+# Module-level singleton shared across handle.py and command.py
+chat_manager = ChatManager()
+
+
+class ImageChatManager:
+    def __init__(self, prompt: str, file_id: str, model: str = "gemini-2.0-flash") -> None:
         self.prompt = prompt
         self.file_id = file_id
+        self.model = model if model.startswith("gemini") else "gemini-2.0-flash"
 
-    def tel_photo_url(self) -> str:
-        """process telegram photo url"""
-        r_file_id = requests.get(
-            f"https://api.telegram.org/bot{BOT_TOKEN}/getFile?file_id={self.file_id}"
-        )
-        file_path = r_file_id.json().get("result").get("file_path")
-        download_url = f"https://api.telegram.org/file/bot{BOT_TOKEN}/{file_path}"
-        return download_url
+    def _photo_url(self) -> str:
+        r = requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/getFile?file_id={self.file_id}")
+        file_path = r.json()["result"]["file_path"]
+        return f"https://api.telegram.org/file/bot{BOT_TOKEN}/{file_path}"
 
-    def photo_bytes(self) -> BytesIO:
-        """get photo bytes"""
-        photo_url = self.tel_photo_url()
-        response = requests.get(photo_url)
-        photo_bytes = BytesIO(response.content)
-        return photo_bytes
+    def photo_url(self) -> str:
+        return self._photo_url()
 
     def send_image(self) -> str:
-        response = generate_text_with_image(self.prompt, self.photo_bytes())
-        return response
+        from .gemini import generate_text_with_image
+        photo_bytes = BytesIO(requests.get(self._photo_url()).content)
+        return generate_text_with_image(self.prompt, photo_bytes, self.model)

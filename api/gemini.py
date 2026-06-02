@@ -1,82 +1,53 @@
 from io import BytesIO
+from typing import Optional
 
-import google.generativeai as genai
 import PIL.Image
+from google import genai
+from google.genai import types
 
-from .config import GOOGLE_API_KEY, generation_config, safety_settings, gemini_err_info, new_chat_info
+from .config import GOOGLE_API_KEY, generation_config, ai_err_info
 
-genai.configure(api_key=GOOGLE_API_KEY[0])
-
-model_usual = genai.GenerativeModel(
-    model_name="gemini-pro",
-    generation_config=generation_config,
-    safety_settings=safety_settings)
-
-model_vision = genai.GenerativeModel(
-    model_name="gemini-pro-vision",
-    generation_config=generation_config,
-    safety_settings=safety_settings)
+_client: Optional[genai.Client] = None
 
 
-def list_models() -> None:
-    """list all models"""
-    for m in genai.list_models():
-        print(m)
-        if "generateContent" in m.supported_generation_methods:
-            print(m.name)
-
-""" This function is deprecated """
-def generate_content(prompt: str) -> str:
-    """generate text from prompt"""
-    try:
-        response = model_usual.generate_content(prompt)
-        result = response.text
-    except Exception as e:
-        result = f"{gemini_err_info}\n{repr(e)}"
-    return result
+def _get_client() -> genai.Client:
+    global _client
+    if _client is None:
+        if not GOOGLE_API_KEY or not GOOGLE_API_KEY[0]:
+            raise RuntimeError("GOOGLE_API_KEY is not configured.")
+        _client = genai.Client(api_key=GOOGLE_API_KEY[0])
+    return _client
 
 
-def generate_text_with_image(prompt: str, image_bytes: BytesIO) -> str:
-    """generate text from prompt and image"""
+def generate_text_with_image(prompt: str, image_bytes: BytesIO, model: str = "gemini-2.0-flash") -> str:
     img = PIL.Image.open(image_bytes)
     try:
-        response = model_vision.generate_content([prompt, img])
-        result = response.text
+        response = _get_client().models.generate_content(
+            model=model,
+            contents=[img, prompt],
+        )
+        return response.text
     except Exception as e:
-        result = f"{gemini_err_info}\n{repr(e)}"
-    return result
+        return f"{ai_err_info}\n{repr(e)}"
 
 
 class ChatConversation:
-    """
-    Kicks off an ongoing chat. If the input is /new,
-    it triggers the start of a fresh conversation.
-    """
-
-    def __init__(self) -> None:
-        self.chat = model_usual.start_chat(history=[])
+    def __init__(self, model: str = "gemini-2.0-flash", system_prompt: str = "") -> None:
+        self.model = model
+        self.system_prompt = system_prompt
+        cfg = types.GenerateContentConfig(
+            max_output_tokens=generation_config.get("max_output_tokens", 2048),
+            system_instruction=system_prompt if system_prompt else None,
+        )
+        self._chat = _get_client().chats.create(model=model, config=cfg)
 
     def send_message(self, prompt: str) -> str:
-        """send message"""
-        if prompt.startswith("/new"):
-            self.__init__()
-            result = new_chat_info
-        else:
-            try:
-                response = self.chat.send_message(prompt)
-                result = response.text
-            except Exception as e:
-                result = f"{gemini_err_info}\n{repr(e)}"
-        return result
+        try:
+            response = self._chat.send_message(prompt)
+            return response.text
+        except Exception as e:
+            return f"{ai_err_info}\n{repr(e)}"
 
     @property
-    def history(self):
-        return self.chat.history
-
-    @property
-    def history_length(self):
-        return len(self.chat.history)
-
-
-if __name__ == "__main__":
-    print(list_models())
+    def history_length(self) -> int:
+        return len(self._chat.get_history())
