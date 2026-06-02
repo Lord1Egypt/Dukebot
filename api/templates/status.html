@@ -7,11 +7,7 @@
     <title>Duke Bot — Setup</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -19,18 +15,19 @@
             color: #e1e4e8;
             min-height: 100vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
+            padding: 32px 16px;
         }
 
         .card {
             background: #161b22;
             border: 1px solid #30363d;
             border-radius: 12px;
-            padding: 40px;
+            padding: 36px;
             width: 100%;
-            max-width: 480px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            max-width: 520px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
         }
 
         .header {
@@ -39,49 +36,61 @@
             gap: 12px;
             margin-bottom: 24px;
         }
+        .header-icon { font-size: 28px; }
+        .header h1 { font-size: 20px; font-weight: 600; color: #f0f6fc; }
+        .header p { font-size: 13px; color: #8b949e; margin-top: 2px; }
 
-        .header-icon {
-            font-size: 28px;
+        .divider { border: none; border-top: 1px solid #30363d; margin: 20px 0; }
+
+        .step {
+            margin-bottom: 24px;
         }
-
-        .header h1 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #f0f6fc;
-        }
-
-        .header p {
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             font-size: 13px;
+            font-weight: 600;
             color: #8b949e;
-            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+        .step-num {
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #58a6ff;
+            flex-shrink: 0;
         }
 
-        .divider {
-            border: none;
-            border-top: 1px solid #30363d;
-            margin: 20px 0;
-        }
-
-        .instructions {
-            font-size: 14px;
-            color: #8b949e;
-            margin-bottom: 20px;
+        .notice {
+            background: #1c2128;
+            border: 1px solid #f0883e44;
+            border-left: 3px solid #f0883e;
+            border-radius: 6px;
+            padding: 12px 14px;
+            font-size: 13px;
+            color: #c9d1d9;
             line-height: 1.6;
+            margin-bottom: 16px;
         }
+        .notice strong { color: #f0883e; }
 
         .input-group {
             display: flex;
             flex-direction: column;
             gap: 6px;
-            margin-bottom: 24px;
+            margin-bottom: 12px;
         }
-
-        .input-group label {
-            font-size: 13px;
-            color: #8b949e;
-            font-weight: 500;
-        }
-
+        .input-group label { font-size: 13px; color: #8b949e; font-weight: 500; }
         .input-group input {
             background: #0d1117;
             border: 1px solid #30363d;
@@ -93,20 +102,10 @@
             transition: border-color 0.2s;
             width: 100%;
         }
+        .input-group input:focus { border-color: #58a6ff; }
+        .input-group input::placeholder { color: #484f58; }
 
-        .input-group input:focus {
-            border-color: #58a6ff;
-        }
-
-        .input-group input::placeholder {
-            color: #484f58;
-        }
-
-        .actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        .actions { display: flex; flex-direction: column; gap: 10px; }
 
         .btn {
             display: flex;
@@ -120,66 +119,50 @@
             transition: background 0.2s, transform 0.1s;
             cursor: pointer;
         }
+        .btn:active { transform: scale(0.98); }
+        .btn i { width: 18px; text-align: center; font-size: 15px; }
+        .btn-label { flex: 1; }
+        .btn-arrow { margin-left: auto; opacity: 0.5; font-size: 12px; }
 
-        .btn:active {
-            transform: scale(0.98);
-        }
+        .btn-green { background: #1a4731; color: #3fb950; border: 1px solid #2ea043; }
+        .btn-green:hover { background: #2ea043; color: #fff; }
+        .btn-blue { background: #0c2d6b; color: #58a6ff; border: 1px solid #1f6feb; }
+        .btn-blue:hover { background: #1f6feb; color: #fff; }
+        .btn-red { background: #3d1a1a; color: #f85149; border: 1px solid #da3633; }
+        .btn-red:hover { background: #da3633; color: #fff; }
+        .btn-orange { background: #2d1f0a; color: #f0883e; border: 1px solid #f0883e66; }
+        .btn-orange:hover { background: #f0883e; color: #fff; }
+        .btn-purple { background: #1f1535; color: #bc8cff; border: 1px solid #8957e566; }
+        .btn-purple:hover { background: #8957e5; color: #fff; }
 
-        .btn i {
-            width: 18px;
-            text-align: center;
-            font-size: 15px;
+        .env-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+            margin-top: 10px;
         }
+        .env-table th {
+            text-align: left;
+            padding: 6px 10px;
+            color: #8b949e;
+            font-weight: 600;
+            border-bottom: 1px solid #30363d;
+        }
+        .env-table td {
+            padding: 7px 10px;
+            border-bottom: 1px solid #21262d;
+            vertical-align: top;
+        }
+        .env-table tr:last-child td { border-bottom: none; }
+        .env-key {
+            font-family: monospace;
+            color: #79c0ff;
+            white-space: nowrap;
+        }
+        .env-req { color: #f85149; font-size: 11px; font-weight: 700; }
+        .env-opt { color: #8b949e; font-size: 11px; }
 
-        .btn-green {
-            background: #1a4731;
-            color: #3fb950;
-            border: 1px solid #2ea043;
-        }
-
-        .btn-green:hover {
-            background: #2ea043;
-            color: #fff;
-        }
-
-        .btn-blue {
-            background: #0c2d6b;
-            color: #58a6ff;
-            border: 1px solid #1f6feb;
-        }
-
-        .btn-blue:hover {
-            background: #1f6feb;
-            color: #fff;
-        }
-
-        .btn-red {
-            background: #3d1a1a;
-            color: #f85149;
-            border: 1px solid #da3633;
-        }
-
-        .btn-red:hover {
-            background: #da3633;
-            color: #fff;
-        }
-
-        .btn-label {
-            flex: 1;
-        }
-
-        .btn-arrow {
-            margin-left: auto;
-            opacity: 0.5;
-            font-size: 12px;
-        }
-
-        .footer {
-            margin-top: 24px;
-            font-size: 12px;
-            color: #484f58;
-            text-align: center;
-        }
+        .footer { margin-top: 24px; font-size: 12px; color: #484f58; text-align: center; }
     </style>
     <script>
         function updateURL() {
@@ -190,16 +173,13 @@
             document.getElementById('setWebhookURL').href = token
                 ? 'https://api.telegram.org/bot' + token + '/setWebhook?url=' + base + '&allowed_updates=' + encodeURIComponent('["message","callback_query"]')
                 : '#';
-
             document.getElementById('getWebhookInfoURL').href = token
                 ? 'https://api.telegram.org/bot' + token + '/getWebhookInfo'
                 : '#';
-
             document.getElementById('deleteWebhookURL').href = token
                 ? 'https://api.telegram.org/bot' + token + '/deleteWebhook'
                 : '#';
         }
-
         window.onload = updateURL;
     </script>
 </head>
@@ -210,43 +190,122 @@
             <span class="header-icon">🤖</span>
             <div>
                 <h1>Duke Bot Setup</h1>
-                <p>Connect your Telegram bot to Vercel</p>
+                <p>Follow the 3 steps below to get your bot running</p>
             </div>
         </div>
 
         <hr class="divider">
 
-        <p class="instructions">
-            Enter your Telegram bot token below, then click <strong>Set Webhook</strong> to activate the bot.
-        </p>
-
-        <div class="input-group">
-            <label for="botToken"><i class="fa-solid fa-key"></i> Bot Token</label>
-            <input id="botToken" type="text" placeholder="123456789:ABCdef..." oninput="updateURL()" />
+        <!-- STEP 1 -->
+        <div class="step">
+            <div class="step-title">
+                <span class="step-num">1</span>
+                Add Environment Variables in Vercel
+            </div>
+            <div class="notice">
+                <strong>Do this first.</strong> The bot token entered below is only used to register the webhook — it is <strong>not saved to the server</strong>. You must add <code>BOT_TOKEN</code> and <code>GOOGLE_API_KEY</code> in your Vercel project settings so the bot can send replies and call the AI.
+            </div>
+            <a href="https://vercel.com/dashboard" target="_blank" class="btn btn-orange" style="margin-bottom:10px;">
+                <i class="fa-solid fa-gear"></i>
+                <span class="btn-label">Open Vercel Dashboard → Settings → Environment Variables</span>
+                <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
+            </a>
+            <table class="env-table">
+                <tr>
+                    <th>Variable</th>
+                    <th>Value</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td class="env-key">BOT_TOKEN</td>
+                    <td>Your token from <a href="https://t.me/BotFather" target="_blank" style="color:#58a6ff;">@BotFather</a></td>
+                    <td class="env-req">REQUIRED</td>
+                </tr>
+                <tr>
+                    <td class="env-key">GOOGLE_API_KEY</td>
+                    <td>From <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#58a6ff;">Google AI Studio</a></td>
+                    <td class="env-req">REQUIRED</td>
+                </tr>
+                <tr>
+                    <td class="env-key">OPENAI_API_KEY</td>
+                    <td>OpenAI / OpenRouter / Groq / etc.</td>
+                    <td class="env-opt">optional</td>
+                </tr>
+                <tr>
+                    <td class="env-key">OPENAI_BASE_URL</td>
+                    <td><code style="font-size:11px;color:#8b949e;">https://api.openai.com/v1</code> or your provider's URL</td>
+                    <td class="env-opt">optional</td>
+                </tr>
+                <tr>
+                    <td class="env-key">AUCH_ENABLE</td>
+                    <td><code style="font-size:11px;color:#8b949e;">0</code> = open to all, <code style="font-size:11px;color:#8b949e;">1</code> = restricted (default)</td>
+                    <td class="env-opt">optional</td>
+                </tr>
+                <tr>
+                    <td class="env-key">ALLOWED_USERS</td>
+                    <td>Comma-separated Telegram IDs or usernames</td>
+                    <td class="env-opt">optional</td>
+                </tr>
+            </table>
+            <p style="font-size:12px;color:#8b949e;margin-top:10px;">After adding env vars, click <strong>Redeploy</strong> in the Vercel dashboard (Deployments → &hellip; → Redeploy).</p>
         </div>
 
-        <div class="actions">
-            <a id="setWebhookURL" href="#" class="btn btn-green" target="_blank">
-                <i class="fa-solid fa-plug-circle-bolt"></i>
-                <span class="btn-label">Set Webhook <small>(start bot)</small></span>
-                <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
-            </a>
+        <hr class="divider">
 
-            <a id="getWebhookInfoURL" href="#" class="btn btn-blue" target="_blank">
-                <i class="fa-solid fa-circle-info"></i>
-                <span class="btn-label">Get Webhook Info</span>
-                <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
-            </a>
+        <!-- STEP 2 -->
+        <div class="step">
+            <div class="step-title">
+                <span class="step-num">2</span>
+                Register the Webhook
+            </div>
+            <p style="font-size:13px;color:#8b949e;margin-bottom:12px;">
+                Enter your bot token and click <strong>Set Webhook</strong>. This tells Telegram to forward messages to this deployment URL.
+            </p>
+            <div class="input-group">
+                <label for="botToken"><i class="fa-solid fa-key"></i> Bot Token</label>
+                <input id="botToken" type="text" placeholder="123456789:ABCdef..." oninput="updateURL()" />
+            </div>
+            <div class="actions">
+                <a id="setWebhookURL" href="#" class="btn btn-green" target="_blank">
+                    <i class="fa-solid fa-plug-circle-bolt"></i>
+                    <span class="btn-label">Set Webhook <small>(start bot)</small></span>
+                    <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
+                </a>
+                <a id="getWebhookInfoURL" href="#" class="btn btn-blue" target="_blank">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span class="btn-label">Get Webhook Info</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
+                </a>
+                <a id="deleteWebhookURL" href="#" class="btn btn-red" target="_blank">
+                    <i class="fa-solid fa-plug-circle-xmark"></i>
+                    <span class="btn-label">Delete Webhook <small>(stop bot)</small></span>
+                    <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
+                </a>
+            </div>
+        </div>
 
-            <a id="deleteWebhookURL" href="#" class="btn btn-red" target="_blank">
-                <i class="fa-solid fa-plug-circle-xmark"></i>
-                <span class="btn-label">Delete Webhook <small>(stop bot)</small></span>
-                <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
-            </a>
+        <hr class="divider">
+
+        <!-- STEP 3 -->
+        <div class="step">
+            <div class="step-title">
+                <span class="step-num">3</span>
+                Test Your Bot
+            </div>
+            <p style="font-size:13px;color:#8b949e;margin-bottom:12px;">
+                Open your bot in Telegram and send <code style="color:#79c0ff;">/start</code>. Use <code style="color:#79c0ff;">/get_my_info</code> to get your user ID for <code style="color:#79c0ff;">ALLOWED_USERS</code> if access control is enabled.
+            </p>
+            <div class="actions">
+                <a href="https://t.me/BotFather" target="_blank" class="btn btn-purple">
+                    <i class="fa-brands fa-telegram"></i>
+                    <span class="btn-label">Open BotFather to find your bot</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
+                </a>
+            </div>
         </div>
 
         <div class="footer">
-            Duke Bot · Powered by Vercel &amp; Google Gemini
+            Duke Bot &middot; Powered by Vercel, Google Gemini &amp; OpenAI-compatible APIs
         </div>
     </div>
 </body>

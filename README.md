@@ -57,24 +57,22 @@ The `/prompt` command gives you three built-in presets plus a custom option:
 
 ### Vercel (Recommended - One Click Deploy)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Lord1Egypt/Dukebot)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Lord1Egypt/Dukebot&env=BOT_TOKEN,GOOGLE_API_KEY,OPENAI_API_KEY,OPENAI_BASE_URL&envDescription=BOT_TOKEN%20and%20GOOGLE_API_KEY%20are%20required.%20OPENAI_API_KEY%20and%20OPENAI_BASE_URL%20are%20optional%20for%20OpenAI-compatible%20providers%20(OpenRouter%2C%20Groq%2C%20etc).&envLink=https%3A%2F%2Fgithub.com%2FLord1Egypt%2FDukebot%23environment-variables)
 
 **Fastest way to deploy:**
 
-1. Click the "Deploy with Vercel" button above
-2. Connect your GitHub account
-3. Authorize Vercel to access your repos
-4. Click "Import Repository"
-5. Add environment variables in Vercel dashboard:
-   - `BOT_TOKEN` — Your Telegram bot token
-   - `GOOGLE_API_KEY` — Your Google Gemini API key
-   - Other optional vars (see Environment Variables section below)
-6. Click "Deploy"
-7. After deployment completes, set your Telegram webhook:
-   ```
-   https://api.telegram.org/bot<BOT_TOKEN>/setWebhook?url=<YOUR_VERCEL_URL>
-   ```
-   Or visit your Vercel deployment URL in a browser and use the setup page.
+1. Click the **Deploy with Vercel** button above
+2. Connect your GitHub account and authorize Vercel
+3. Vercel will prompt you for environment variables — fill in at minimum:
+   - `BOT_TOKEN` — Your Telegram bot token from [@BotFather](https://t.me/BotFather)
+   - `GOOGLE_API_KEY` — Your Gemini key from [Google AI Studio](https://aistudio.google.com/app/apikey)
+   - `OPENAI_API_KEY` — *(optional)* For OpenAI / OpenRouter / Groq / Mistral / etc.
+   - `OPENAI_BASE_URL` — *(optional)* Your provider's base URL (leave blank for OpenAI)
+4. Click **Deploy** and wait for it to finish
+5. Visit your deployment URL — you'll see the setup page
+6. On the setup page, enter your bot token and click **Set Webhook** to connect Telegram
+
+> **Important:** The bot token entered on the setup page only registers the webhook direction (Telegram → your bot). It is **not saved to the server**. You must enter it in step 3 above so the bot can send replies back to Telegram.
 
 ### Railway
 
