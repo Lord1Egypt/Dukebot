@@ -26,7 +26,7 @@
             border-radius: 12px;
             padding: 36px;
             width: 100%;
-            max-width: 520px;
+            max-width: 540px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.4);
         }
 
@@ -40,11 +40,9 @@
         .header h1 { font-size: 20px; font-weight: 600; color: #f0f6fc; }
         .header p { font-size: 13px; color: #8b949e; margin-top: 2px; }
 
-        .divider { border: none; border-top: 1px solid #30363d; margin: 20px 0; }
+        .divider { border: none; border-top: 1px solid #30363d; margin: 22px 0; }
 
-        .step {
-            margin-bottom: 24px;
-        }
+        .step { margin-bottom: 24px; }
         .step-title {
             display: flex;
             align-items: center;
@@ -72,17 +70,25 @@
         }
 
         .notice {
-            background: #1c2128;
-            border: 1px solid #f0883e44;
-            border-left: 3px solid #f0883e;
             border-radius: 6px;
             padding: 12px 14px;
             font-size: 13px;
             color: #c9d1d9;
             line-height: 1.6;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
-        .notice strong { color: #f0883e; }
+        .notice-orange {
+            background: #1c2128;
+            border: 1px solid #f0883e44;
+            border-left: 3px solid #f0883e;
+        }
+        .notice-orange strong { color: #f0883e; }
+        .notice-red {
+            background: #1c1010;
+            border: 1px solid #f8514944;
+            border-left: 3px solid #f85149;
+        }
+        .notice-red strong { color: #f85149; }
 
         .input-group {
             display: flex;
@@ -124,12 +130,12 @@
         .btn-label { flex: 1; }
         .btn-arrow { margin-left: auto; opacity: 0.5; font-size: 12px; }
 
-        .btn-green { background: #1a4731; color: #3fb950; border: 1px solid #2ea043; }
-        .btn-green:hover { background: #2ea043; color: #fff; }
-        .btn-blue { background: #0c2d6b; color: #58a6ff; border: 1px solid #1f6feb; }
-        .btn-blue:hover { background: #1f6feb; color: #fff; }
-        .btn-red { background: #3d1a1a; color: #f85149; border: 1px solid #da3633; }
-        .btn-red:hover { background: #da3633; color: #fff; }
+        .btn-green  { background: #1a4731; color: #3fb950; border: 1px solid #2ea043; }
+        .btn-green:hover  { background: #2ea043; color: #fff; }
+        .btn-blue   { background: #0c2d6b; color: #58a6ff; border: 1px solid #1f6feb; }
+        .btn-blue:hover   { background: #1f6feb; color: #fff; }
+        .btn-red    { background: #3d1a1a; color: #f85149; border: 1px solid #da3633; }
+        .btn-red:hover    { background: #da3633; color: #fff; }
         .btn-orange { background: #2d1f0a; color: #f0883e; border: 1px solid #f0883e66; }
         .btn-orange:hover { background: #f0883e; color: #fff; }
         .btn-purple { background: #1f1535; color: #bc8cff; border: 1px solid #8957e566; }
@@ -154,13 +160,11 @@
             vertical-align: top;
         }
         .env-table tr:last-child td { border-bottom: none; }
-        .env-key {
-            font-family: monospace;
-            color: #79c0ff;
-            white-space: nowrap;
-        }
-        .env-req { color: #f85149; font-size: 11px; font-weight: 700; }
-        .env-opt { color: #8b949e; font-size: 11px; }
+        .env-key { font-family: monospace; color: #79c0ff; white-space: nowrap; }
+        .env-req  { color: #f85149; font-size: 11px; font-weight: 700; }
+        .env-sec  { color: #f0883e; font-size: 11px; font-weight: 700; }
+        .env-opt  { color: #8b949e; font-size: 11px; }
+        .env-table tr.security-row td { background: #1c1a10; }
 
         .footer { margin-top: 24px; font-size: 12px; color: #484f58; text-align: center; }
     </style>
@@ -186,6 +190,7 @@
 
 <body>
     <div class="card">
+
         <div class="header">
             <span class="header-icon">🤖</span>
             <div>
@@ -202,14 +207,22 @@
                 <span class="step-num">1</span>
                 Add Environment Variables in Vercel
             </div>
-            <div class="notice">
-                <strong>Do this first.</strong> The bot token entered below is only used to register the webhook — it is <strong>not saved to the server</strong>. You must add <code>BOT_TOKEN</code> and <code>GOOGLE_API_KEY</code> in your Vercel project settings so the bot can send replies and call the AI.
+
+            <div class="notice notice-orange">
+                <strong>Do this first.</strong> The bot token entered below only registers the webhook — it is <strong>not saved to the server</strong>. Add <code>BOT_TOKEN</code> and <code>GOOGLE_API_KEY</code> in Vercel so the bot can send replies and call the AI.
             </div>
-            <a href="https://vercel.com/dashboard" target="_blank" class="btn btn-orange" style="margin-bottom:10px;">
+
+            <div class="notice notice-red">
+                <strong><i class="fa-solid fa-shield-halved"></i> Protect your API keys.</strong>
+                Without <code>ALLOWED_USERS</code>, anyone who finds your bot URL can send unlimited messages and drain your Gemini / OpenAI quota. Set <code>ALLOWED_USERS</code> to your Telegram ID — send <code>/get_my_info</code> to the bot to find it.
+            </div>
+
+            <a href="https://vercel.com/dashboard" target="_blank" class="btn btn-orange" style="margin-bottom:12px;">
                 <i class="fa-solid fa-gear"></i>
                 <span class="btn-label">Open Vercel Dashboard → Settings → Environment Variables</span>
                 <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
             </a>
+
             <table class="env-table">
                 <tr>
                     <th>Variable</th>
@@ -226,28 +239,36 @@
                     <td>From <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#58a6ff;">Google AI Studio</a></td>
                     <td class="env-req">REQUIRED</td>
                 </tr>
+                <tr class="security-row">
+                    <td class="env-key">ALLOWED_USERS</td>
+                    <td>Your Telegram ID or <code>@username</code> — send <code>/get_my_info</code> to get it. Comma-separate multiple users.</td>
+                    <td class="env-sec">⚠ SECURITY</td>
+                </tr>
+                <tr class="security-row">
+                    <td class="env-key">AUCH_ENABLE</td>
+                    <td><code>1</code> = only ALLOWED_USERS can chat (default &amp; recommended)<br><code>0</code> = open to everyone</td>
+                    <td class="env-sec">⚠ SECURITY</td>
+                </tr>
                 <tr>
                     <td class="env-key">OPENAI_API_KEY</td>
-                    <td>OpenAI / OpenRouter / Groq / etc.</td>
+                    <td>For OpenAI / <a href="https://openrouter.ai" target="_blank" style="color:#58a6ff;">OpenRouter</a> / Groq / Mistral / etc.</td>
                     <td class="env-opt">optional</td>
                 </tr>
                 <tr>
                     <td class="env-key">OPENAI_BASE_URL</td>
-                    <td><code style="font-size:11px;color:#8b949e;">https://api.openai.com/v1</code> or your provider's URL</td>
+                    <td>Your provider's base URL (default: <code>https://api.openai.com/v1</code>)</td>
                     <td class="env-opt">optional</td>
                 </tr>
                 <tr>
-                    <td class="env-key">AUCH_ENABLE</td>
-                    <td><code style="font-size:11px;color:#8b949e;">0</code> = open to all, <code style="font-size:11px;color:#8b949e;">1</code> = restricted (default)</td>
-                    <td class="env-opt">optional</td>
-                </tr>
-                <tr>
-                    <td class="env-key">ALLOWED_USERS</td>
-                    <td>Comma-separated Telegram IDs or usernames</td>
+                    <td class="env-key">ADMIN_ID</td>
+                    <td>Your Telegram user ID — enables admin commands</td>
                     <td class="env-opt">optional</td>
                 </tr>
             </table>
-            <p style="font-size:12px;color:#8b949e;margin-top:10px;">After adding env vars, click <strong>Redeploy</strong> in the Vercel dashboard (Deployments → &hellip; → Redeploy).</p>
+
+            <p style="font-size:12px;color:#8b949e;margin-top:10px;">
+                After adding env vars, click <strong>Redeploy</strong> in Vercel (Deployments → &hellip; → Redeploy).
+            </p>
         </div>
 
         <hr class="divider">
@@ -290,15 +311,43 @@
         <div class="step">
             <div class="step-title">
                 <span class="step-num">3</span>
-                Test Your Bot
+                Test &amp; Secure Your Bot
             </div>
-            <p style="font-size:13px;color:#8b949e;margin-bottom:12px;">
-                Open your bot in Telegram and send <code style="color:#79c0ff;">/start</code>. Use <code style="color:#79c0ff;">/get_my_info</code> to get your user ID for <code style="color:#79c0ff;">ALLOWED_USERS</code> if access control is enabled.
+            <p style="font-size:13px;color:#8b949e;margin-bottom:14px;">
+                Send <code style="color:#79c0ff;">/start</code> to test. Then get your Telegram ID and add it to <code style="color:#79c0ff;">ALLOWED_USERS</code> in Vercel to protect your API keys.
             </p>
+
+            <p style="font-size:12px;font-weight:600;color:#8b949e;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">How to get your Telegram ID</p>
+            <table class="env-table" style="margin-top:0;margin-bottom:14px;">
+                <tr>
+                    <td style="padding:7px 10px;border-bottom:1px solid #21262d;font-size:12.5px;">
+                        <strong style="color:#e1e4e8;">Method 1 — Use this bot</strong><br>
+                        <span style="color:#8b949e;">Send <code style="color:#79c0ff;">/get_my_info</code> to your bot → it replies with your user ID</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:7px 10px;border-bottom:1px solid #21262d;font-size:12.5px;">
+                        <strong style="color:#e1e4e8;">Method 2 — @userinfobot</strong><br>
+                        <span style="color:#8b949e;">Open <a href="https://t.me/userinfobot" target="_blank" style="color:#58a6ff;">@userinfobot</a> on Telegram and send any message — it replies instantly with your ID</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:7px 10px;font-size:12.5px;">
+                        <strong style="color:#e1e4e8;">For group chat IDs</strong><br>
+                        <span style="color:#8b949e;">Add your bot to the group and send <code style="color:#79c0ff;">/get_group_info</code> — the bot replies with the group ID (a negative number like <code style="color:#8b949e;">-1001234567890</code>). Add it to <code style="color:#79c0ff;">ALLOWED_GROUPS</code>.</span>
+                    </td>
+                </tr>
+            </table>
+
             <div class="actions">
                 <a href="https://t.me/BotFather" target="_blank" class="btn btn-purple">
                     <i class="fa-brands fa-telegram"></i>
                     <span class="btn-label">Open BotFather to find your bot</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
+                </a>
+                <a href="https://t.me/userinfobot" target="_blank" class="btn btn-blue">
+                    <i class="fa-solid fa-id-card"></i>
+                    <span class="btn-label">Get your Telegram ID via @userinfobot</span>
                     <i class="fa-solid fa-arrow-up-right-from-square btn-arrow"></i>
                 </a>
             </div>
@@ -307,6 +356,7 @@
         <div class="footer">
             Duke Bot &middot; Powered by Vercel, Google Gemini &amp; OpenAI-compatible APIs
         </div>
+
     </div>
 </body>
 

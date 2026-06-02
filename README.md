@@ -57,7 +57,7 @@ The `/prompt` command gives you three built-in presets plus a custom option:
 
 ### Vercel (Recommended - One Click Deploy)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Lord1Egypt/Dukebot&env=BOT_TOKEN,GOOGLE_API_KEY,OPENAI_API_KEY,OPENAI_BASE_URL&envDescription=BOT_TOKEN%20and%20GOOGLE_API_KEY%20are%20required.%20OPENAI_API_KEY%20and%20OPENAI_BASE_URL%20are%20optional%20for%20OpenAI-compatible%20providers%20(OpenRouter%2C%20Groq%2C%20etc).&envLink=https%3A%2F%2Fgithub.com%2FLord1Egypt%2FDukebot%23environment-variables)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Lord1Egypt/Dukebot&env=BOT_TOKEN,GOOGLE_API_KEY,ALLOWED_USERS,OPENAI_API_KEY,OPENAI_BASE_URL&envDescription=BOT_TOKEN%20and%20GOOGLE_API_KEY%20are%20required.%20ALLOWED_USERS%3A%20your%20Telegram%20ID%20to%20protect%20your%20API%20keys%20from%20abuse%20(send%20%2Fget_my_info%20to%20get%20it).%20OPENAI_API_KEY%20and%20OPENAI_BASE_URL%20are%20optional.&envLink=https%3A%2F%2Fgithub.com%2FLord1Egypt%2FDukebot%23environment-variables)
 
 **Fastest way to deploy:**
 
@@ -66,6 +66,7 @@ The `/prompt` command gives you three built-in presets plus a custom option:
 3. Vercel will prompt you for environment variables — fill in at minimum:
    - `BOT_TOKEN` — Your Telegram bot token from [@BotFather](https://t.me/BotFather)
    - `GOOGLE_API_KEY` — Your Gemini key from [Google AI Studio](https://aistudio.google.com/app/apikey)
+   - `ALLOWED_USERS` — ⚠️ **Your Telegram user ID** (send `/get_my_info` to find it). Prevents anyone from using your bot and draining your API quota. Comma-separate multiple IDs.
    - `OPENAI_API_KEY` — *(optional)* For OpenAI / OpenRouter / Groq / Mistral / etc.
    - `OPENAI_BASE_URL` — *(optional)* Your provider's base URL (leave blank for OpenAI)
 4. Click **Deploy** and wait for it to finish
@@ -136,8 +137,33 @@ The `/prompt` command gives you three built-in presets plus a custom option:
 | Variable | Description |
 |----------|-------------|
 | `AUCH_ENABLE` | `1` = restricted (default), `0` = open to everyone |
-| `ALLOWED_USERS` | Comma-separated Telegram usernames or user IDs |
-| `ALLOWED_GROUPS` | Comma-separated group names or group IDs |
+| `ALLOWED_USERS` | Comma-separated Telegram user IDs or `@usernames` |
+| `ALLOWED_GROUPS` | Comma-separated group IDs or group `@usernames` |
+
+> ⚠️ **Always set `ALLOWED_USERS`** to protect your Gemini and OpenAI API keys from being used by random people.
+
+#### How to find your Telegram user ID
+
+**Method 1 — Use the bot itself:**
+1. Deploy the bot and set the webhook
+2. Send `/get_my_info` to your bot in Telegram
+3. The bot replies with your user ID — copy it into `ALLOWED_USERS`
+
+**Method 2 — Use @userinfobot:**
+1. Open Telegram and search for [@userinfobot](https://t.me/userinfobot)
+2. Send it any message — it replies with your ID instantly
+
+**Method 3 — Use @RawDataBot:**
+1. Search for [@RawDataBot](https://t.me/RawDataBot) on Telegram
+2. Forward any message to it — it shows the full JSON including your `id`
+
+#### How to find a group chat ID
+
+1. Add your bot to the group
+2. Send `/get_group_info` in the group
+3. The bot replies with the group ID — copy it into `ALLOWED_GROUPS`
+
+Alternatively, add [@RawDataBot](https://t.me/RawDataBot) to the group and send any message — the group ID appears in the JSON (it's a negative number, e.g. `-1001234567890`).
 
 ### Admin & Debug (Optional)
 
