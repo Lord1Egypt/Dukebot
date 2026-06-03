@@ -139,9 +139,9 @@ def execute_command(from_id: int, command: str, from_type: str, chat_id: int,
         return cmd_model(from_id, chat_id)
     if cmd == "prompt":
         return cmd_prompt(from_id, chat_id)
-    if cmd == "get_my_info":
+    if cmd in ("get_my_info", "getmyinfo"):
         return cmd_get_my_info(from_id)
-    if cmd == "get_group_info":
+    if cmd in ("get_group_info", "getgroupinfo"):
         return cmd_get_group_info(from_type, chat_id)
     if cmd == "get_allowed_users":
         return cmd_get_allowed_users(from_id)
