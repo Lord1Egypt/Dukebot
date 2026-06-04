@@ -20,12 +20,12 @@ AUCH_ENABLE = os.getenv("AUCH_ENABLE", "1")
 GROUP_MODE = os.getenv("GROUP_MODE", "1")
 
 # ── Models ────────────────────────────────────────────────────────────────────
-_gemini_defaults = "gemini-2.0-flash,gemini-1.5-pro,gemini-1.5-flash"
+_gemini_defaults = "gemini-flash-latest,gemini-1.5-pro,gemini-1.5-flash"
 _openai_defaults = "gpt-4o,gpt-4o-mini"
 
 GEMINI_MODELS = [m for m in split(r'[ ,;，；]+', os.getenv("GEMINI_MODELS", _gemini_defaults)) if m]
 OPENAI_MODELS = [m for m in split(r'[ ,;，；]+', os.getenv("OPENAI_MODELS", _openai_defaults)) if m]
-DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", GEMINI_MODELS[0] if GEMINI_MODELS else "gemini-2.0-flash")
+DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", GEMINI_MODELS[0] if GEMINI_MODELS else "gemini-flash-latest")
 
 
 # ── System prompt presets ─────────────────────────────────────────────────────
