@@ -20,7 +20,7 @@ AUCH_ENABLE = os.getenv("AUCH_ENABLE", "1")
 GROUP_MODE = os.getenv("GROUP_MODE", "1")
 
 # ── Models ────────────────────────────────────────────────────────────────────
-_gemini_defaults = "gemini-flash-latest,gemini-1.5-pro,gemini-1.5-flash"
+_gemini_defaults = "gemini-flash-latest,gemini-flash-lite-latest,gemini-pro-latest"
 _openai_defaults = "gpt-4o,gpt-4o-mini"
 
 GEMINI_MODELS = [m for m in split(r'[ ,;，；]+', os.getenv("GEMINI_MODELS", _gemini_defaults)) if m]
