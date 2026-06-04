@@ -19,7 +19,7 @@ def _get_client() -> genai.Client:
     return _client
 
 
-def generate_text_with_image(prompt: str, image_bytes: BytesIO, model: str = "gemini-2.0-flash") -> str:
+def generate_text_with_image(prompt: str, image_bytes: BytesIO, model: str = "gemini-flash-latest") -> str:
     img = PIL.Image.open(image_bytes)
     try:
         response = _get_client().models.generate_content(
@@ -32,7 +32,7 @@ def generate_text_with_image(prompt: str, image_bytes: BytesIO, model: str = "ge
 
 
 class ChatConversation:
-    def __init__(self, model: str = "gemini-2.0-flash", system_prompt: str = "") -> None:
+    def __init__(self, model: str = "gemini-flash-latest", system_prompt: str = "") -> None:
         self.model = model
         self.system_prompt = system_prompt
         cfg = types.GenerateContentConfig(
